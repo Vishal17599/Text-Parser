@@ -30,7 +30,7 @@ function input() {
     // for (i = 0; i < n; i++)
     //     console.log(obj[i]);
     stack.push(0);
-    stack.push(0);
+    stack.push(4);
     var rootques = String(str[0].substring(1, str[0].length));
 
     document.getElementById("main").style.display = "block";
@@ -47,8 +47,14 @@ function undo() {
     if (stack.length > 0) {
         let b = stack.pop();
         let a = stack.pop();
+        b = stack.pop();
+        a = stack.pop();
+        console.log(a);
+        console.log(b);
         document.getElementById("ques").innerHTML = obj[a][b].substring(1, obj[a][b].length);
-        level = a;
+        stack.push(a);
+        stack.push(b);
+        level = a + 1;
     }
 }
 
