@@ -2,6 +2,9 @@ var str = [];
 var n;
 var obj;
 let stack = [];
+
+
+
 function input() {
     str = $('#input').val().split("\n");
     n = str.length;
@@ -49,6 +52,14 @@ var para = 4;
 
 
 function notSure() {
+
+    var ul = document.getElementById("log");
+    let candidate = "Not Sure";
+    let li = document.createElement("li");
+    li.appendChild(document.createTextNode(candidate));
+    ul.appendChild(li);
+
+
     var j = -1, f = 0, t = 0;
     // para++;
     for (let i = 4; i < obj[level].length; i++) {
@@ -64,32 +75,41 @@ function notSure() {
         stack.push(level);
         stack.push(f);
         document.getElementById("ques").innerHTML = obj[level][f].substring(1, obj[level][f].length);
+        let candidate = obj[level][f].substring(1, obj[level][f].length);
+        let li = document.createElement("li");
+        li.appendChild(document.createTextNode(candidate));
+        ul.appendChild(li);
+
         level++;
         t = 1;
     }
-    else {
-        //Add it to Log(This is the statement without question mark)
-    }
-    if (obj[level][j][obj[level][j].length - 1] == "?" && t == 0) {
+
+    else if (obj[level][j][obj[level][j].length - 1] == "?" && t == 0) {
         stack.push(level);
         stack.push(j);
         document.getElementById("ques").innerHTML = obj[level][j].substring(1, obj[level][j].length);
+        let candidate = obj[level][j].substring(1, obj[level][j].length);
+        let li = document.createElement("li");
+        li.appendChild(document.createTextNode(candidate));
+        ul.appendChild(li);
         level++;
     }
     else {
-        //Add it to Log(This is the statement without question mark)
+        let candidate = "Unable to come to a conclusion";
+        let li = document.createElement("li");
+        li.appendChild(document.createTextNode(candidate));
+        ul.appendChild(li);
     }
+
 }
-
-
-
-
 
 
 function undo() {
     if (stack.length > 2) {
         let b = stack.pop();
         let a = stack.pop();
+        if (obj[a][b][obj[a][b].length - 1] != "?")
+            para--;
         b = stack.pop();
         a = stack.pop();
         console.log(a);
