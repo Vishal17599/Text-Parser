@@ -1,6 +1,7 @@
 var str = [];
 var n;
 var obj;
+let stack = [];
 function input() {
     str = $('#input').val().split("\n");
     n = str.length;
@@ -14,7 +15,8 @@ function input() {
     let p = 3;
     // console.log(str[1]);
     for (var i = 0; i < n; i++) {
-        let size = str[i].search(/\S/);
+        let size = str[i].split("-").length - 1;
+        // console.log(size);
         if (size == 0) {
             p++;
         }
@@ -22,12 +24,13 @@ function input() {
         let len = str[i].length;
         let s = str[i].search(',');
         str[i] = p.toString() + str[i].substring(s + 1, len)
-        obj[size / 4].push(str[i]);
+        obj[size / 2].push(str[i]);
     }
 
     // for (i = 0; i < n; i++)
     //     console.log(obj[i]);
-
+    stack.push(0);
+    stack.push(0);
     var rootques = String(str[0].substring(1, str[0].length));
 
     document.getElementById("main").style.display = "block";
@@ -40,12 +43,23 @@ var level = 1;
 var para = 4;
 
 
+function undo() {
+    if (stack.length > 0) {
+        let b = stack.pop();
+        let a = stack.pop();
+        document.getElementById("ques").innerHTML = obj[a][b].substring(1, obj[a][b].length);
+        level = a;
+    }
+}
+
 function next() {
     level = 0;
     if (obj[level][para] == undefined)
         alert("End of Paragraph");
     // console.log(obj[level][para]);
     else {
+        stack.push(level);
+        stack.push(para);
         document.getElementById("res").style.display = "none";
         document.getElementById("ques").style.display = "block";
         document.getElementById("ques").innerHTML = obj[level][para].substring(1, obj[level][para].length);
@@ -73,6 +87,8 @@ function vishalyes() {
         }
     }
     // console.log(obj[level][j]);
+    stack.push(level);
+    stack.push(j);
     if (j == -1) {
         alert("End of Paragraph");
     }
@@ -108,8 +124,10 @@ function vishalNo() {
             break;
         }
     }
-    console.log(j);
-    console.log(obj[level][j]);
+    stack.push(level);
+    stack.push(j);
+    // console.log(j);
+    // console.log(obj[level][j]);
     if (j == -1)
         alert("End of Paragraph");
 
