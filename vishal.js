@@ -25,13 +25,13 @@ function input() {
         }
         // console.log(size);
         let len = str[i].length;
-        let s = str[i].search(',');
-        str[i] = p.toString() + str[i].substring(s + 1, len)
+        // let s = str[i].search(',');
+        str[i] = p.toString() + str[i].substring(size);
         obj[size / 2].push(str[i]);
     }
 
-    // for (i = 0; i < n; i++)
-    //     console.log(obj[i]);
+    for (i = 0; i < n; i++)
+        console.log(obj[i]);
     stack.push(0);
     stack.push(4);
     var rootques = String(str[0].substring(1, str[0].length));
@@ -39,6 +39,14 @@ function input() {
     document.getElementById("main").style.display = "block";
 
     document.getElementById("ques").innerHTML = rootques;
+    let len1 = obj[1][4].search(',');
+    let s1 = obj[1][4].substring(3, len1);
+    document.getElementById("ans1").innerHTML = s1;
+    document.getElementById("ans1").value = s1;
+    len1 = obj[1][5].search(',');
+    s1 = obj[1][5].substring(3, len1);
+    document.getElementById("ans2").innerHTML = s1;
+    document.getElementById("ans2").value = s1;
     var ul = document.getElementById("log");
     var candidate = rootques;
     var li = document.createElement("li");
@@ -74,8 +82,29 @@ function notSure() {
     if (obj[level][f][obj[level][f].length - 1] == "?") {
         stack.push(level);
         stack.push(f);
-        document.getElementById("ques").innerHTML = obj[level][f].substring(1, obj[level][f].length);
-        let candidate = obj[level][f].substring(1, obj[level][f].length);
+        var j1 = -1, f1 = 0, len1;
+        let s1, s2;
+        for (let i = 4; i < obj[level + 1].length; i++) {
+            if (obj[level][i][0] == para.toString() && f1 == 0) {
+                f1 = i;
+                len1 = obj[level + 1][f1].search(',');
+                s1 = obj[level + 1][f1].substring(3, len1);
+            }
+            else if (obj[level + 1][i][0] == para.toString() && f1 != 0) {
+                j1 = i;
+                len1 = obj[level + 1][j1].search(',');
+                s2 = obj[level + 1][j1].substring(3, len1);
+                break;
+            }
+        }
+        document.getElementById("ans1").innerHTML = s1;
+        document.getElementById("ans2").innerHTML = s2;
+        document.getElementById("ans1").value = s1;
+        document.getElementById("ans2").value = s2;
+        let start = obj[level][f].search(',');
+        if (start == -1) start = 0;
+        document.getElementById("ques").innerHTML = obj[level][f].substring(start + 1, obj[level][f].length);
+        let candidate = obj[level][f].substring(start + 1, obj[level][f].length);
         let li = document.createElement("li");
         li.appendChild(document.createTextNode(candidate));
         ul.appendChild(li);
@@ -87,18 +116,52 @@ function notSure() {
     else if (obj[level][j][obj[level][j].length - 1] == "?" && t == 0) {
         stack.push(level);
         stack.push(j);
-        document.getElementById("ques").innerHTML = obj[level][j].substring(1, obj[level][j].length);
-        let candidate = obj[level][j].substring(1, obj[level][j].length);
+        var j1 = -1, f1 = 0, len1;
+        let s1, s2;
+        for (let i = 4; i < obj[level + 1].length; i++) {
+            if (obj[level][i][0] == para.toString() && f1 == 0) {
+                f1 = i;
+                len1 = obj[level + 1][f1].search(',');
+                s1 = obj[level + 1][f1].substring(3, len1);
+            }
+            else if (obj[level + 1][i][0] == para.toString() && f1 != 0) {
+                j1 = i;
+                len1 = obj[level + 1][j1].search(',');
+                s2 = obj[level + 1][j1].substring(3, len1);
+                break;
+            }
+        }
+        document.getElementById("ans1").innerHTML = s1;
+        document.getElementById("ans2").innerHTML = s2;
+        document.getElementById("ans1").value = s1;
+        document.getElementById("ans2").value = s2;
+        let start = obj[level][j].search(',');
+        if (start == -1) start = 0;
+        document.getElementById("ques").innerHTML = obj[level][j].substring(start + 1, obj[level][j].length);
+        let candidate = obj[level][j].substring(start + 1, obj[level][j].length);
         let li = document.createElement("li");
         li.appendChild(document.createTextNode(candidate));
         ul.appendChild(li);
         level++;
     }
     else {
-        let candidate = "Unable to come to a conclusion";
+        stack.push(level);
+        stack.push(j);
+        document.getElementById("ques").style.display = "none";
+        document.getElementById("ans1").style.display = "none";
+        document.getElementById("ans2").style.display = "none";
+        document.getElementById("ans3").style.display = "inline-block";
+        document.getElementById("res").style.display = "block";
+        document.getElementById("res").innerHTML = obj[level][f].substring(1, obj[level][f].length) + " or " + obj[level][j].substring(1, obj[level][j].length);
+        let candidate = obj[level][f].substring(1, obj[level][f].length) + " or " + obj[level][j].substring(1, obj[level][j].length);
         let li = document.createElement("li");
         li.appendChild(document.createTextNode(candidate));
         ul.appendChild(li);
+        // candidate = obj[level][j].substring(1, obj[level][j].length);
+        // li = document.createElement("li");
+        // li.appendChild(document.createTextNode(candidate));
+        // ul.appendChild(li);
+        para++;
     }
 
 }
@@ -115,12 +178,33 @@ function undo() {
         console.log(a);
         console.log(b);
         console.log(obj[a][b].substring(1, obj[a][b].length));
+        var j1 = -1, f1 = 0, len1;
+        let s1, s2;
+        for (let i = 4; i < obj[a + 1].length; i++) {
+            if (obj[level][i][0] == para.toString() && f1 == 0) {
+                f1 = i;
+                len1 = obj[a + 1][f1].search(',');
+                s1 = obj[a + 1][f1].substring(3, len1);
+            }
+            else if (obj[a + 1][i][0] == para.toString() && f1 != 0) {
+                j1 = i;
+                len1 = obj[a + 1][j1].search(',');
+                s2 = obj[a + 1][j1].substring(3, len1);
+                break;
+            }
+        }
+        document.getElementById("ans1").innerHTML = s1;
+        document.getElementById("ans2").innerHTML = s2;
+        document.getElementById("ans1").value = s1;
+        document.getElementById("ans2").value = s2;
         document.getElementById("res").style.display = "none";
         document.getElementById("ques").style.display = "block";
         document.getElementById("ans1").style.display = "inline-block";
         document.getElementById("ans2").style.display = "inline-block";
         document.getElementById("ans3").style.display = "none";
-        document.getElementById("ques").innerHTML = obj[a][b].substring(1, obj[a][b].length);
+        let start = obj[a][b].search(',');
+        if (start == -1) start = 0;
+        document.getElementById("ques").innerHTML = obj[a][b].substring(start + 1, obj[a][b].length);
         stack.push(a);
         stack.push(b);
         level = a + 1;
@@ -147,10 +231,32 @@ function next() {
         var li = document.createElement("li");
         li.appendChild(document.createTextNode(candidate));
         ul.appendChild(li);
-
+        if (obj[level][j][obj[level][j].length - 1] == "?") {
+            var j1 = -1, f1 = 0, len1;
+            let s1, s2;
+            for (let i = 4; i < obj[level + 1].length; i++) {
+                if (obj[level][i][0] == para.toString() && f1 == 0) {
+                    f1 = i;
+                    len1 = obj[level + 1][f1].search(',');
+                    s1 = obj[level + 1][f1].substring(3, len1);
+                }
+                else if (obj[level + 1][i][0] == para.toString() && f1 != 0) {
+                    j1 = i;
+                    len1 = obj[level + 1][j1].search(',');
+                    s2 = obj[level + 1][j1].substring(3, len1);
+                    break;
+                }
+            }
+            document.getElementById("ans1").innerHTML = s1;
+            document.getElementById("ans2").innerHTML = s2;
+            document.getElementById("ans1").value = s1;
+            document.getElementById("ans2").value = s2;
+        }
         document.getElementById("res").style.display = "none";
         document.getElementById("ques").style.display = "block";
-        document.getElementById("ques").innerHTML = obj[level][para].substring(1, obj[level][para].length);
+        let start = obj[level][para].search(',');
+        if (start == -1) start = 0;
+        document.getElementById("ques").innerHTML = obj[level][para].substring(start + 1, obj[level][para].length);
         document.getElementById("ans1").style.display = "inline-block";
         document.getElementById("ans2").style.display = "inline-block";
         document.getElementById("ans3").style.display = "none";
@@ -162,8 +268,9 @@ function next() {
 
 
 function vishalyes() {
+    // console.log(document.getElementById("ans1").value);
     var ul = document.getElementById("log");
-    var candidate = "Yes";
+    var candidate = document.getElementById("ans1").value;
     var li = document.createElement("li");
     li.appendChild(document.createTextNode(candidate));
     ul.appendChild(li);
@@ -188,9 +295,30 @@ function vishalyes() {
     }
     else {
         if (obj[level][j][obj[level][j].length - 1] == "?") {
+            var j1 = -1, f1 = 0, len1;
+            let s1, s2;
+            for (let i = 4; i < obj[level + 1].length; i++) {
+                if (obj[level][i][0] == para.toString() && f1 == 0) {
+                    f1 = i;
+                    len1 = obj[level + 1][f1].search(',');
+                    s1 = obj[level + 1][f1].substring(3, len1);
+                }
+                else if (obj[level + 1][i][0] == para.toString() && f1 != 0) {
+                    j1 = i;
+                    len1 = obj[level + 1][j1].search(',');
+                    s2 = obj[level + 1][j1].substring(3, len1);
+                    break;
+                }
+            }
+            document.getElementById("ans1").innerHTML = s1;
+            document.getElementById("ans2").innerHTML = s2;
+            document.getElementById("ans1").value = s1;
+            document.getElementById("ans2").value = s2;
             // console.log(obj[level][j]);
-            document.getElementById("ques").innerHTML = obj[level][j].substring(1, obj[level][j].length);
-            var candidate = obj[level][j].substring(1, obj[level][j].length);
+            let start = obj[level][j].search(',');
+            if (start == -1) start = 0;
+            document.getElementById("ques").innerHTML = obj[level][j].substring(start + 1, obj[level][j].length);
+            var candidate = obj[level][j].substring(start + 1, obj[level][j].length);
             var li = document.createElement("li");
             li.appendChild(document.createTextNode(candidate));
             ul.appendChild(li);
@@ -203,8 +331,10 @@ function vishalyes() {
             document.getElementById("ans3").style.display = "inline-block";
             document.getElementById("res").style.display = "block";
             // console.log(obj[level][j]);
-            document.getElementById("res").innerHTML = obj[level][j].substring(1, obj[level][j].length);
-            var candidate = obj[level][j].substring(1, obj[level][j].length);
+            let start = obj[level][j].search(',');
+            if (start == -1) start = 0;
+            document.getElementById("res").innerHTML = obj[level][j].substring(start + 1, obj[level][j].length);
+            var candidate = obj[level][j].substring(start + 1, obj[level][j].length);
             var li = document.createElement("li");
             li.appendChild(document.createTextNode(candidate));
             ul.appendChild(li);
@@ -216,7 +346,7 @@ function vishalNo() {
 
     var ul = document.getElementById("log");
 
-    var candidate = "No";
+    var candidate = document.getElementById("ans2").value;
     var li = document.createElement("li");
     li.appendChild(document.createTextNode(candidate));
     ul.appendChild(li);
@@ -243,9 +373,30 @@ function vishalNo() {
 
     else {
         if (obj[level][j][obj[level][j].length - 1] == "?") {
+            var j1 = -1, f1 = 0, len1;
+            let s1, s2;
+            for (let i = 4; i < obj[level + 1].length; i++) {
+                if (obj[level][i][0] == para.toString() && f1 == 0) {
+                    f1 = i;
+                    len1 = obj[level + 1][f1].search(',');
+                    s1 = obj[level + 1][f1].substring(3, len1);
+                }
+                else if (obj[level + 1][i][0] == para.toString() && f1 != 0) {
+                    j1 = i;
+                    len1 = obj[level + 1][j1].search(',');
+                    s2 = obj[level + 1][j1].substring(3, len1);
+                    break;
+                }
+            }
+            document.getElementById("ans1").innerHTML = s1;
+            document.getElementById("ans2").innerHTML = s2;
+            document.getElementById("ans1").value = s1;
+            document.getElementById("ans2").value = s2;
             // console.log(obj[level][j]);
-            document.getElementById("ques").innerHTML = obj[level][j].substring(1, obj[level][j].length);
-            var candidate = obj[level][j].substring(1, obj[level][j].length);
+            let start = obj[level][j].search(',');
+            if (start == -1) start = 0;
+            document.getElementById("ques").innerHTML = obj[level][j].substring(start + 1, obj[level][j].length);
+            var candidate = obj[level][j].substring(start + 1, obj[level][j].length);
             var li = document.createElement("li");
             li.appendChild(document.createTextNode(candidate));
             ul.appendChild(li);
@@ -257,9 +408,11 @@ function vishalNo() {
             document.getElementById("ans2").style.display = "none";
             document.getElementById("ans3").style.display = "inline-block";
             document.getElementById("res").style.display = "block";
-            document.getElementById("res").innerHTML = obj[level][j].substring(1, obj[level][j].length);
+            let start = obj[level][j].search(',');
+            if (start == -1) start = 0;
+            document.getElementById("res").innerHTML = obj[level][j].substring(start + 1, obj[level][j].length);
 
-            var candidate = obj[level][j].substring(1, obj[level][j].length);
+            var candidate = obj[level][j].substring(start + 1, obj[level][j].length);
             var li = document.createElement("li");
             li.appendChild(document.createTextNode(candidate));
             ul.appendChild(li);
