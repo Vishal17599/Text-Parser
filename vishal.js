@@ -2,15 +2,20 @@ var str = [];
 var n;
 var obj;
 let stack = [];
-
-
+var arr = [];
+var zero = [];
+var vec;
+var ptr = 0;
 
 function input() {
+    document.getElementById("undo").style.display = "inline-block";
     str = $('#input').val().split("\n");
     n = str.length;
+    vec = new Array(n);
     obj = new Array(n);
     for (var i = 0; i < obj.length; i++) {
         obj[i] = new Array(4);
+        arr[i] = new Array(0);
     }
 
     // console.log(n);
@@ -18,406 +23,232 @@ function input() {
     let p = 3;
     // console.log(str[1]);
     for (var i = 0; i < n; i++) {
-        let size = str[i].split("-").length - 1;
+        let size = 0;
+        for (var j = 0; j < str[i].length; j++) {
+            if (str[i][j] != '-') break;
+            else size++;
+        }
         // console.log(size);
+        vec[size / 2] = i;
         if (size == 0) {
             p++;
+            // arr[0].push(i);
+            zero.push(i);
+        }
+        else {
+            arr[vec[(size / 2) - 1]].push(i);
         }
         // console.log(size);
         let len = str[i].length;
         // let s = str[i].search(',');
-        str[i] = p.toString() + str[i].substring(size);
+        str[i] = str[i].substring(size);
         obj[size / 2].push(str[i]);
     }
-
-    for (i = 0; i < n; i++)
-        console.log(obj[i]);
-    stack.push(0);
-    stack.push(4);
-    var rootques = String(str[0].substring(1, str[0].length));
-
-    document.getElementById("main").style.display = "block";
-
-    document.getElementById("ques").innerHTML = rootques;
-    let len1 = obj[1][4].search(',');
-    let s1 = obj[1][4].substring(3, len1);
-    document.getElementById("ans1").innerHTML = s1;
-    document.getElementById("ans1").value = s1;
-    len1 = obj[1][5].search(',');
-    s1 = obj[1][5].substring(3, len1);
-    document.getElementById("ans2").innerHTML = s1;
-    document.getElementById("ans2").value = s1;
-    var ul = document.getElementById("log");
-    var candidate = rootques;
-    var li = document.createElement("li");
-    li.appendChild(document.createTextNode(candidate));
-    ul.appendChild(li);
+    option(0);
 }
 
-
-var level = 1;
-var para = 4;
-
-
 function notSure() {
-
-    var ul = document.getElementById("log");
-    let candidate = "Not Sure";
-    let li = document.createElement("li");
-    li.appendChild(document.createTextNode(candidate));
-    ul.appendChild(li);
-
-
-    var j = -1, f = 0, t = 0;
-    // para++;
-    for (let i = 4; i < obj[level].length; i++) {
-        if (obj[level][i][0] == para.toString() && f == 0) {
-            f = i;
-        }
-        else if (obj[level][i][0] == para.toString() && f != 0) {
-            j = i;
-            break;
-        }
+    // Todo update the logs 
+    console.log(document.getElementById("notSure").value);
+    let line = document.getElementById("notSure").value;
+    let line2 = 0;
+    var div = document.getElementById("res");
+    while (div.lastElementChild) {
+        div.removeChild(div.lastElementChild);
     }
-    if (obj[level][f][obj[level][f].length - 1] == "?") {
-        stack.push(level);
-        stack.push(f);
-        var j1 = -1, f1 = 0, len1;
-        let s1, s2;
-        for (let i = 4; i < obj[level + 1].length; i++) {
-            if (obj[level][i][0] == para.toString() && f1 == 0) {
-                f1 = i;
-                len1 = obj[level + 1][f1].search(',');
-                s1 = obj[level + 1][f1].substring(3, len1);
-            }
-            else if (obj[level + 1][i][0] == para.toString() && f1 != 0) {
-                j1 = i;
-                len1 = obj[level + 1][j1].search(',');
-                s2 = obj[level + 1][j1].substring(3, len1);
-                break;
-            }
-        }
-        document.getElementById("ans1").innerHTML = s1;
-        document.getElementById("ans2").innerHTML = s2;
-        document.getElementById("ans1").value = s1;
-        document.getElementById("ans2").value = s2;
-        let start = obj[level][f].search(',');
-        if (start == -1) start = 0;
-        document.getElementById("ques").innerHTML = obj[level][f].substring(start + 1, obj[level][f].length);
-        let candidate = obj[level][f].substring(start + 1, obj[level][f].length);
-        let li = document.createElement("li");
-        li.appendChild(document.createTextNode(candidate));
-        ul.appendChild(li);
-
-        level++;
-        t = 1;
+    var s = "";
+    for (var i = 0; i < arr[line].length; i++) {
+        if (arr[arr[line][i]].length == 0)
+            s += "\n" + str[arr[line][i]] + "\n";
+        else
+            line2 = arr[line][i];
     }
+    if (line2 != 0) {
+        document.getElementById("notSure").value = line2;
+        stack.push(line2);
+        s += str[line2];
+        document.getElementById("ques").innerHTML = s;
+        for (var i = 0; i < arr[line2].length; i++) {
+            len1 = str[arr[line2][i]].search(',');
+            s1 = str[arr[line2][i]].substring(3, len1);
 
-    else if (obj[level][j][obj[level][j].length - 1] == "?" && t == 0) {
-        stack.push(level);
-        stack.push(j);
-        var j1 = -1, f1 = 0, len1;
-        let s1, s2;
-        for (let i = 4; i < obj[level + 1].length; i++) {
-            if (obj[level][i][0] == para.toString() && f1 == 0) {
-                f1 = i;
-                len1 = obj[level + 1][f1].search(',');
-                s1 = obj[level + 1][f1].substring(3, len1);
+            let candidate = s1;
+            let btn = document.createElement("BUTTON");
+            let t = document.createTextNode(candidate);
+
+            btn.setAttribute("id", arr[line2][i]);
+            btn.setAttribute("class", "btn btn-info");
+            btn.setAttribute("style", "margin:4px");
+            btn.onclick = function () {
+                option(btn.id);
             }
-            else if (obj[level + 1][i][0] == para.toString() && f1 != 0) {
-                j1 = i;
-                len1 = obj[level + 1][j1].search(',');
-                s2 = obj[level + 1][j1].substring(3, len1);
-                break;
-            }
+            btn.appendChild(t);
+            div.appendChild(btn);
         }
-        document.getElementById("ans1").innerHTML = s1;
-        document.getElementById("ans2").innerHTML = s2;
-        document.getElementById("ans1").value = s1;
-        document.getElementById("ans2").value = s2;
-        let start = obj[level][j].search(',');
-        if (start == -1) start = 0;
-        document.getElementById("ques").innerHTML = obj[level][j].substring(start + 1, obj[level][j].length);
-        let candidate = obj[level][j].substring(start + 1, obj[level][j].length);
-        let li = document.createElement("li");
-        li.appendChild(document.createTextNode(candidate));
-        ul.appendChild(li);
-        level++;
     }
     else {
-        stack.push(level);
-        stack.push(j);
-        document.getElementById("ques").style.display = "none";
-        document.getElementById("ans1").style.display = "none";
-        document.getElementById("ans2").style.display = "none";
-        document.getElementById("ans3").style.display = "inline-block";
-        document.getElementById("res").style.display = "block";
-        document.getElementById("res").innerHTML = obj[level][f].substring(1, obj[level][f].length) + " or " + obj[level][j].substring(1, obj[level][j].length);
-        let candidate = obj[level][f].substring(1, obj[level][f].length) + " or " + obj[level][j].substring(1, obj[level][j].length);
-        let li = document.createElement("li");
-        li.appendChild(document.createTextNode(candidate));
-        ul.appendChild(li);
-        // candidate = obj[level][j].substring(1, obj[level][j].length);
-        // li = document.createElement("li");
-        // li.appendChild(document.createTextNode(candidate));
-        // ul.appendChild(li);
-        para++;
+        document.getElementById("ques").innerHTML = s;
     }
+    // var ul = document.getElementById("log");
+    // let candidate = "Not Sure";
+    // let li = document.createElement("li");
+    // li.appendChild(document.createTextNode(candidate));
+    // ul.appendChild(li);
+
+
+    // var j = -1, f = 0, t = 0;
+    // for (let i = 4; i < obj[level].length; i++) {
+    //     if (obj[level][i][0] == para.toString() && f == 0) {
+    //         f = i;
+    //     }
+    //     else if (obj[level][i][0] == para.toString() && f != 0) {
+    //         j = i;
+    //         break;
+    //     }
+    // }
+    // if (obj[level][f][obj[level][f].length - 1] == "?") {
+    //     stack.push(level);
+    //     stack.push(f);
+    //     var j1 = -1, f1 = 0, len1;
+    //     let s1, s2;
+    //     for (let i = 4; i < obj[level + 1].length; i++) {
+    //         if (obj[level][i][0] == para.toString() && f1 == 0) {
+    //             f1 = i;
+    //             len1 = obj[level + 1][f1].search(',');
+    //             s1 = obj[level + 1][f1].substring(3, len1);
+    //         }
+    //         else if (obj[level + 1][i][0] == para.toString() && f1 != 0) {
+    //             j1 = i;
+    //             len1 = obj[level + 1][j1].search(',');
+    //             s2 = obj[level + 1][j1].substring(3, len1);
+    //             break;
+    //         }
+    //     }
+    //     document.getElementById("ans1").innerHTML = s1;
+    //     document.getElementById("ans2").innerHTML = s2;
+    //     document.getElementById("ans1").value = s1;
+    //     document.getElementById("ans2").value = s2;
+    //     let start = obj[level][f].search(',');
+    //     if (start == -1) start = 0;
+    //     document.getElementById("ques").innerHTML = obj[level][f].substring(start + 1, obj[level][f].length);
+    //     let candidate = obj[level][f].substring(start + 1, obj[level][f].length);
+    //     let li = document.createElement("li");
+    //     li.appendChild(document.createTextNode(candidate));
+    //     ul.appendChild(li);
+
+    //     level++;
+    //     t = 1;
+    // }
+
+    // else if (obj[level][j][obj[level][j].length - 1] == "?" && t == 0) {
+    //     stack.push(level);
+    //     stack.push(j);
+    //     var j1 = -1, f1 = 0, len1;
+    //     let s1, s2;
+    //     for (let i = 4; i < obj[level + 1].length; i++) {
+    //         if (obj[level][i][0] == para.toString() && f1 == 0) {
+    //             f1 = i;
+    //             len1 = obj[level + 1][f1].search(',');
+    //             s1 = obj[level + 1][f1].substring(3, len1);
+    //         }
+    //         else if (obj[level + 1][i][0] == para.toString() && f1 != 0) {
+    //             j1 = i;
+    //             len1 = obj[level + 1][j1].search(',');
+    //             s2 = obj[level + 1][j1].substring(3, len1);
+    //             break;
+    //         }
+    //     }
+    //     document.getElementById("ans1").innerHTML = s1;
+    //     document.getElementById("ans2").innerHTML = s2;
+    //     document.getElementById("ans1").value = s1;
+    //     document.getElementById("ans2").value = s2;
+    //     let start = obj[level][j].search(',');
+    //     if (start == -1) start = 0;
+    //     document.getElementById("ques").innerHTML = obj[level][j].substring(start + 1, obj[level][j].length);
+    //     let candidate = obj[level][j].substring(start + 1, obj[level][j].length);
+    //     let li = document.createElement("li");
+    //     li.appendChild(document.createTextNode(candidate));
+    //     ul.appendChild(li);
+    //     level++;
+    // }
+    // else {
+    //     stack.push(level);
+    //     stack.push(j);
+    //     document.getElementById("ques").style.display = "none";
+    //     document.getElementById("ans1").style.display = "none";
+    //     document.getElementById("ans2").style.display = "none";
+    //     document.getElementById("ans3").style.display = "inline-block";
+    //     document.getElementById("res").style.display = "block";
+    //     document.getElementById("res").innerHTML = obj[level][f].substring(1, obj[level][f].length) + " or " + obj[level][j].substring(1, obj[level][j].length);
+    //     let candidate = obj[level][f].substring(1, obj[level][f].length) + " or " + obj[level][j].substring(1, obj[level][j].length);
+    //     let li = document.createElement("li");
+    //     li.appendChild(document.createTextNode(candidate));
+    //     ul.appendChild(li);
+    //     para++;
+    // }
 
 }
 
 
 function undo() {
-    if (stack.length > 2) {
-        let b = stack.pop();
+    document.getElementById("ans3").style.display = "none";
+    if (stack.length > 1) {
         let a = stack.pop();
-        if (obj[a][b][obj[a][b].length - 1] != "?")
-            para--;
-        b = stack.pop();
-        a = stack.pop();
         console.log(a);
+        let b = stack.pop();
         console.log(b);
-        console.log(obj[a][b].substring(1, obj[a][b].length));
-        var j1 = -1, f1 = 0, len1;
-        let s1, s2;
-        for (let i = 4; i < obj[a + 1].length; i++) {
-            if (obj[level][i][0] == para.toString() && f1 == 0) {
-                f1 = i;
-                len1 = obj[a + 1][f1].search(',');
-                s1 = obj[a + 1][f1].substring(3, len1);
-            }
-            else if (obj[a + 1][i][0] == para.toString() && f1 != 0) {
-                j1 = i;
-                len1 = obj[a + 1][j1].search(',');
-                s2 = obj[a + 1][j1].substring(3, len1);
-                break;
-            }
-        }
-        document.getElementById("ans1").innerHTML = s1;
-        document.getElementById("ans2").innerHTML = s2;
-        document.getElementById("ans1").value = s1;
-        document.getElementById("ans2").value = s2;
-        document.getElementById("res").style.display = "none";
-        document.getElementById("ques").style.display = "block";
-        document.getElementById("ans1").style.display = "inline-block";
-        document.getElementById("ans2").style.display = "inline-block";
-        document.getElementById("ans3").style.display = "none";
-        let start = obj[a][b].search(',');
-        if (start == -1) start = 0;
-        document.getElementById("ques").innerHTML = obj[a][b].substring(start + 1, obj[a][b].length);
-        stack.push(a);
-        stack.push(b);
-        level = a + 1;
-
         var list = document.getElementById("log");
         list.removeChild(list.lastChild);
         list.removeChild(list.lastChild);
-
+        option(b);
     }
 }
 
 function next() {
-    level = 0;
-    if (obj[level][para] == undefined)
+    ptr++;
+    document.getElementById("ans3").style.display = "none";
+    if (ptr < zero.length)
+        option(zero[ptr]);
+    else
         alert("End of Paragraph");
-    // console.log(obj[level][para]);
-    else {
-        stack.push(level);
-        stack.push(para);
-
-
-        var ul = document.getElementById("log");
-        var candidate = obj[level][para].substring(1, obj[level][para].length);
-        var li = document.createElement("li");
-        li.appendChild(document.createTextNode(candidate));
-        ul.appendChild(li);
-        if (obj[level][j][obj[level][j].length - 1] == "?") {
-            var j1 = -1, f1 = 0, len1;
-            let s1, s2;
-            for (let i = 4; i < obj[level + 1].length; i++) {
-                if (obj[level][i][0] == para.toString() && f1 == 0) {
-                    f1 = i;
-                    len1 = obj[level + 1][f1].search(',');
-                    s1 = obj[level + 1][f1].substring(3, len1);
-                }
-                else if (obj[level + 1][i][0] == para.toString() && f1 != 0) {
-                    j1 = i;
-                    len1 = obj[level + 1][j1].search(',');
-                    s2 = obj[level + 1][j1].substring(3, len1);
-                    break;
-                }
-            }
-            document.getElementById("ans1").innerHTML = s1;
-            document.getElementById("ans2").innerHTML = s2;
-            document.getElementById("ans1").value = s1;
-            document.getElementById("ans2").value = s2;
-        }
-        document.getElementById("res").style.display = "none";
-        document.getElementById("ques").style.display = "block";
-        let start = obj[level][para].search(',');
-        if (start == -1) start = 0;
-        document.getElementById("ques").innerHTML = obj[level][para].substring(start + 1, obj[level][para].length);
-        document.getElementById("ans1").style.display = "inline-block";
-        document.getElementById("ans2").style.display = "inline-block";
-        document.getElementById("ans3").style.display = "none";
-        level++;
-    }
-    // para++;
-    // console.log(para);
 }
 
 
-function vishalyes() {
-    // console.log(document.getElementById("ans1").value);
+function option(id) {
+    stack.push(id);
+    // document.getElementById("notSure").value = id;
+    var div = document.getElementById("res");
     var ul = document.getElementById("log");
-    var candidate = document.getElementById("ans1").value;
+    var candidate = str[id];
     var li = document.createElement("li");
     li.appendChild(document.createTextNode(candidate));
     ul.appendChild(li);
-
-    // document.getElementById("ans3").style.display = "none";
-    // console.log(obj[level][para]);
-    // if (para != 4)
-    //     para++;
-    var j = -1;
-    // console.log(para);
-    for (let i = 4; i < obj[level].length; i++) {
-        if (obj[level][i][0] == para.toString()) {
-            j = i;
-            break;
-        }
+    while (div.lastElementChild) {
+        div.removeChild(div.lastElementChild);
     }
-    // console.log(obj[level][j]);
-    stack.push(level);
-    stack.push(j);
-    if (j == -1) {
-        alert("End of Paragraph");
+    len = str[id].search(',');
+    s = str[id].substring(len + 1, str[id].length);
+    document.getElementById("ques").innerHTML = s;
+    if (arr[id].length > 0) {
+        for (var i = 0; i < arr[id].length; i++) {
+            len1 = str[arr[id][i]].search(',');
+            s1 = str[arr[id][i]].substring(3, len1);
+
+            let candidate = s1;
+            let btn = document.createElement("BUTTON");
+            let t = document.createTextNode(candidate);
+
+            btn.setAttribute("id", arr[id][i]);
+            btn.setAttribute("class", "btn btn-info");
+            btn.setAttribute("style", "margin:4px");
+            btn.onclick = function () {
+                option(btn.id);
+            }
+            btn.appendChild(t);
+            div.appendChild(btn);
+        }
     }
     else {
-        if (obj[level][j][obj[level][j].length - 1] == "?") {
-            var j1 = -1, f1 = 0, len1;
-            let s1, s2;
-            for (let i = 4; i < obj[level + 1].length; i++) {
-                if (obj[level][i][0] == para.toString() && f1 == 0) {
-                    f1 = i;
-                    len1 = obj[level + 1][f1].search(',');
-                    s1 = obj[level + 1][f1].substring(3, len1);
-                }
-                else if (obj[level + 1][i][0] == para.toString() && f1 != 0) {
-                    j1 = i;
-                    len1 = obj[level + 1][j1].search(',');
-                    s2 = obj[level + 1][j1].substring(3, len1);
-                    break;
-                }
-            }
-            document.getElementById("ans1").innerHTML = s1;
-            document.getElementById("ans2").innerHTML = s2;
-            document.getElementById("ans1").value = s1;
-            document.getElementById("ans2").value = s2;
-            // console.log(obj[level][j]);
-            let start = obj[level][j].search(',');
-            if (start == -1) start = 0;
-            document.getElementById("ques").innerHTML = obj[level][j].substring(start + 1, obj[level][j].length);
-            var candidate = obj[level][j].substring(start + 1, obj[level][j].length);
-            var li = document.createElement("li");
-            li.appendChild(document.createTextNode(candidate));
-            ul.appendChild(li);
-            level++;
-        }
-        else {
-            document.getElementById("ques").style.display = "none";
-            document.getElementById("ans1").style.display = "none";
-            document.getElementById("ans2").style.display = "none";
-            document.getElementById("ans3").style.display = "inline-block";
-            document.getElementById("res").style.display = "block";
-            // console.log(obj[level][j]);
-            let start = obj[level][j].search(',');
-            if (start == -1) start = 0;
-            document.getElementById("res").innerHTML = obj[level][j].substring(start + 1, obj[level][j].length);
-            var candidate = obj[level][j].substring(start + 1, obj[level][j].length);
-            var li = document.createElement("li");
-            li.appendChild(document.createTextNode(candidate));
-            ul.appendChild(li);
-            para++;
-        }
+        document.getElementById("ans3").style.display = "inline-block";
     }
-}
-function vishalNo() {
-
-    var ul = document.getElementById("log");
-
-    var candidate = document.getElementById("ans2").value;
-    var li = document.createElement("li");
-    li.appendChild(document.createTextNode(candidate));
-    ul.appendChild(li);
-
-    // if (para != 4)
-    //     para--;
-    var j = -1, f = 0;
-    // para++;
-    for (let i = 4; i < obj[level].length; i++) {
-        if (obj[level][i][0] == para.toString() && f == 0) {
-            f = 1;
-        }
-        else if (obj[level][i][0] == para.toString() && f == 1) {
-            j = i;
-            break;
-        }
-    }
-    stack.push(level);
-    stack.push(j);
-    // console.log(j);
-    // console.log(obj[level][j]);
-    if (j == -1)
-        alert("End of Paragraph");
-
-    else {
-        if (obj[level][j][obj[level][j].length - 1] == "?") {
-            var j1 = -1, f1 = 0, len1;
-            let s1, s2;
-            for (let i = 4; i < obj[level + 1].length; i++) {
-                if (obj[level][i][0] == para.toString() && f1 == 0) {
-                    f1 = i;
-                    len1 = obj[level + 1][f1].search(',');
-                    s1 = obj[level + 1][f1].substring(3, len1);
-                }
-                else if (obj[level + 1][i][0] == para.toString() && f1 != 0) {
-                    j1 = i;
-                    len1 = obj[level + 1][j1].search(',');
-                    s2 = obj[level + 1][j1].substring(3, len1);
-                    break;
-                }
-            }
-            document.getElementById("ans1").innerHTML = s1;
-            document.getElementById("ans2").innerHTML = s2;
-            document.getElementById("ans1").value = s1;
-            document.getElementById("ans2").value = s2;
-            // console.log(obj[level][j]);
-            let start = obj[level][j].search(',');
-            if (start == -1) start = 0;
-            document.getElementById("ques").innerHTML = obj[level][j].substring(start + 1, obj[level][j].length);
-            var candidate = obj[level][j].substring(start + 1, obj[level][j].length);
-            var li = document.createElement("li");
-            li.appendChild(document.createTextNode(candidate));
-            ul.appendChild(li);
-            level++;
-        }
-        else {
-            document.getElementById("ques").style.display = "none";
-            document.getElementById("ans1").style.display = "none";
-            document.getElementById("ans2").style.display = "none";
-            document.getElementById("ans3").style.display = "inline-block";
-            document.getElementById("res").style.display = "block";
-            let start = obj[level][j].search(',');
-            if (start == -1) start = 0;
-            document.getElementById("res").innerHTML = obj[level][j].substring(start + 1, obj[level][j].length);
-
-            var candidate = obj[level][j].substring(start + 1, obj[level][j].length);
-            var li = document.createElement("li");
-            li.appendChild(document.createTextNode(candidate));
-            ul.appendChild(li);
-            para++;
-        }
-    }
-
 }
