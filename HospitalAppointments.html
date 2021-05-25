@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Decision Tree with Animated Links</title>
+    <meta charset="utf-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style type="text/css">
+        .mf_diagram_controlNodeContent {
+            box-shadow: rgba(0, 52, 102, 0.35) 4px 4px 4px;
+            text-align: center;
+            border: 1px solid #003466;
+            background-color: #cce6ff !important;
+        }
+
+
+        body {
+            font-family: Tahoma;
+            font-size: 14px;
+        }
+
+        table {
+            border-spacing: 0px;
+            margin-left: 10px;
+            border-right: 1px solid gray;
+            border-top: 1px solid gray;
+            font-size: 12px;
+        }
+
+        select {
+            font-family: Tahoma;
+            font-size: 14px;
+        }
+
+        td {
+            border-left: 1px solid gray;
+            padding: 5px;
+            border-bottom: 1px solid gray;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <textarea rows="10" cols="40" placeholder="Enter Text" id="input"></textarea>
+                <br />
+                <button class="btn btn-info" onclick="input()">Submit</button>
+            </div>
+            <!-- <div class="col-lg-6">
+                <ul id="log">Logs</ul>
+            </div> -->
+        </div>
+    </div>
+    <div style="top: 0px; bottom: 24px;">
+        <!-- The Diagram component is bound to the canvas element below -->
+        <div style="position: absolute; left: 200px; top: 180px; right: 0px; bottom: 0px; overflow: auto;">
+            <canvas id="diagram" width="2100" height="2100">
+                This page requires a browser that supports HTML 5 Canvas element.
+            </canvas>
+        </div>
+    </div>
+    <!-- The ZoomControl component is bound to the canvas element below -->
+    <div style="width: 50px; height: 300px; position: absolute; top: 85px; right: 35px;
+    			width: 50px; height: 300px;z-index:3;">
+        <canvas id="zoomer" width="50" height="300">
+        </canvas>
+    </div>
+    <script src="MindFusion.Common.js" type="text/javascript"></script>
+    <script src="MindFusion.Diagramming.js" type="text/javascript"></script>
+    <script src="HospitalAppointments.js" type="text/javascript"></script>
+    <script src="data.js" type="text/javascript"></script>
+</body>
+
+</html>
