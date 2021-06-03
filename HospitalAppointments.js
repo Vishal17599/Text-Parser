@@ -17,8 +17,13 @@ let stack = [];
 var arr = [];
 var zero = [];
 var vec;
-var bx = 120, by = 50;
+var bx = 50, by = 40;
 var diagram = null;
+
+// $(document).ready(function () {
+// 	diagram = Diagram.create(document.getElementById("diagram"));
+// 	diagram.setBounds(new Rect(0, 0, 500, 500));
+// });
 function input() {
 	// document.getElementById("undo").style.display = "inline-block";
 	str = $('#input').val().split("\n");
@@ -57,9 +62,8 @@ function input() {
 		obj[size / 2].push(str[i]);
 	}
 	diagram = Diagram.create(document.getElementById("diagram"));
+	// diagram.setBounds(new Rect(0, 0, 500, 500));
 	diagram.setVirtualScroll(true);
-
-
 	// create an Overview component that wraps the "overview" canvas
 	// var overview = MindFusion.Diagramming.Overview.create(document.getElementById("overview"));
 	// overview.setDiagram(diagram);
@@ -79,13 +83,13 @@ function input() {
 		</select>
 		</div>`;
 
-	diagram.setDefaultControlTemplate(defaultTemplate);
+	// diagram.setDefaultControlTemplate(defaultTemplate);
 
 	var id = 0;
 	var node = new MindFusion.Diagramming.ControlNode(diagram);
 	len = str[id].search(',');
 	s = str[0].substring(len + 1, str[0].length);
-	var val = `<p>` + s + `<p>` + `<div><select data-interactive="true" data-event-change="selectClick" name= "${id}" id= "${id}"><option value="none" selected></option>`;
+	var val = `<div id="d1"><p>` + s + `</p></div>` + `<div><select data-interactive="true" data-event-change="selectClick" name= "${id}" id= "${id}"><option value="none" selected></option>`;
 
 	if (arr[id].length > 0) {
 		for (var i = 0; i < arr[id].length; i++) {
@@ -104,6 +108,7 @@ function input() {
 	diagram.resizeToFitItems(10);
 	// option(0);
 }
+
 
 
 function selectClick(e, sender) {
@@ -137,7 +142,7 @@ function notSure(id, originNode) {
 			// console.log(ids);
 			len = str[ids].search(',');
 			s = str[ids].substring(len + 1, str[ids].length);
-			var val = `<p>` + str[ids] + `<p>`;
+			var val = `<div id="d1"><p>` + str[ids] + `</p></div>`;
 			if (arr[ids].length > 0) {
 				val += `<div><select data-interactive="true" data-event-change="selectClick" name= "${ids}" id= "${ids}"><option value="none" selected></option>`;
 				for (var j = 0; j < arr[ids].length; j++) {
@@ -173,7 +178,7 @@ function nextoption(id, originNode) {
 	var node = new MindFusion.Diagramming.ControlNode(diagram);
 	len = str[id].search(',');
 	s = str[id].substring(len + 1, str[id].length);
-	var val = `<p>` + s + `<p>`;
+	var val = `<div id="d1"><p>` + s + `</p></div>`;
 	if (arr[id].length > 0) {
 		val += `<div><select data-interactive="true" data-event-change="selectClick" name= "${id}" id= "${id}"><option value="none" selected></option>`;
 		for (var i = 0; i < arr[id].length; i++) {

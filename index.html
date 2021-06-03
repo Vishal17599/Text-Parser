@@ -13,6 +13,15 @@
             background-color: #cce6ff !important;
         }
 
+        #d1 {
+            overflow-x: hidden;
+            overflow-y: scroll;
+            margin-left: auto;
+            margin-right: auto;
+            width: 185px;
+            margin-bottom: 20px;
+            height: 100px;
+        }
 
         body {
             font-family: Tahoma;
@@ -54,14 +63,15 @@
             </div> -->
         </div>
     </div>
-    <div style="top: 0px; bottom: 24px;">
-        <!-- The Diagram component is bound to the canvas element below -->
-        <div style="position: absolute; left: 200px; top: 180px; right: 0px; bottom: 0px; overflow: auto;">
-            <canvas id="diagram" width="2100" height="2100">
-                This page requires a browser that supports HTML 5 Canvas element.
-            </canvas>
-        </div>
+    <!-- The Diagram component is bound to the canvas element below -->
+    <!-- <div style="height: 300px;width: 300px;background-color: azure;"> -->
+    <div style="position: absolute; left: 70px; top: 200px; right: 50px; bottom: 10px; overflow: auto;border: 25px;">
+        <canvas id="diagram" width="1000px" height="1000px">
+            This page requires a browser that supports HTML 5 Canvas element.
+        </canvas>
     </div>
+    <!-- </div> -->
+
     <!-- The ZoomControl component is bound to the canvas element below -->
     <div style="width: 50px; height: 300px; position: absolute; top: 85px; right: 35px;
     			width: 50px; height: 300px;z-index:3;">
