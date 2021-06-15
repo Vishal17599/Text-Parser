@@ -11,12 +11,14 @@ var Animation = MindFusion.Animations.Animation;
 var AnimationType = MindFusion.Animations.AnimationType;
 var EasingType = MindFusion.Animations.EasingType;
 var AnimationEvents = MindFusion.Animations.Events;
-var bx = 50, by = 40;
+var bx = 60, by = 40;
 
 console.log(str);
 myFunction();
 function myFunction() {
     diagram = Diagram.create(document.getElementById("diagram"));
+    var Behavior = MindFusion.Diagramming.Behavior;
+    diagram.setBehavior(Behavior.SelectOnly);
     // diagram.setBounds(new Rect(0, 0, 500, 500));
     diagram.setVirtualScroll(true);
     // create an Overview component that wraps the "overview" canvas
